@@ -27,30 +27,44 @@ class _InsertBookWidgetState extends State<InsertBookWidget> {
   @override
   Widget build(BuildContext context) {
     final isEditing = widget.book != null;
-    return AlertDialog(
-      title: Text(isEditing ? 'Edit book' : 'Add book'),
-      content: Form(
-        key: formKey,
-        child: TextFormField(
-          autofocus: true,
-          controller: titlecontroller,
-          decoration: const InputDecoration(hintText: 'Title'),
-          validator: (value) => value != null && value.isEmpty ? 'Title is required' : null,
+    return Column(
+      children: [
+        AlertDialog(
+          title: Text(isEditing ? 'Edit book' : 'Add book'),
+          content: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  autofocus: true,
+                  controller: titlecontroller,
+                  decoration: const InputDecoration(hintText: 'Title'),
+                  validator: (value) => value != null && value.isEmpty ? 'Title is required' : null,
+                ),
+                TextFormField(
+                  autofocus: true,
+                  controller: descriptioncontroller,
+                  decoration: const InputDecoration(hintText: 'Deskripsi'),
+                  validator: (value) => value != null && value.isEmpty ? 'Isi deskripsi' : null,
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                if (formKey.currentState!.validate()){
+                  widget.onSubmit(titlecontroller.text);
+                }
+              },
+              child: const Text('OK'),
+            )
+          ],
         ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
-        ),
-        TextButton(
-          onPressed: () {
-            if (formKey.currentState!.validate()){
-              widget.onSubmit(titlecontroller.text);
-            }
-          },
-          child: const Text('OK'),
-        )
       ],
     );
   }
